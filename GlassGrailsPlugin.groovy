@@ -12,38 +12,29 @@ class GlassGrailsPlugin {
         "grails-app/views/error.gsp"
     ]
 
-    // TODO Fill in these fields
-    def title = "Glass Plugin" // Headline display name of the plugin
-    def author = "Your name"
-    def authorEmail = ""
+    def title = "Glass Plugin"
+    def author = "Daniel Kelleher"
+    def authorEmail = "dankelleher@yahoo.com"
     def description = '''\
-Brief summary/description of the plugin.
+The Grails Glass Plugin allows you to quickly develop Grails apps for the upcoming Google Glass platform, via the Mirror API. 
+The plugin takes care of the following common tasks: 
+OAuth2 user authentication with Google
+Posting and adding contacts to a user's Glass timeline
+Subscribing to notifications from Glass, triggered by user actions.
 '''
-	
+
+	def documentation = "http://glass.org/plugin/glass"
+	def organization = [name: 'SeeThrough Development', url: 'http://seethrough.dyndns.org']
+
+	def license = "APACHE"
+	def issueManagement = [system: 'GITHUB', url: 'https://github.com/dankelleher/glass/issues']
+	def scm = [url: 'https://github.com/dankelleher/glass']
+
+
 	def dependsOn = [
 		"plugin-config": "0.1.8",
 		"quartz" : "1.0-RC8"
 		]
-
-    // URL to the plugin's documentation
-    def documentation = "http://glass.org/plugin/glass"
-
-    // Extra (optional) plugin metadata
-
-    // License: one of 'APACHE', 'GPL2', 'GPL3'
-//    def license = "APACHE"
-
-    // Details of company behind the plugin (if there is one)
-//    def organization = [ name: "My Company", url: "http://www.my-company.com/" ]
-
-    // Any additional developers beyond the author specified above.
-//    def developers = [ [ name: "Joe Bloggs", email: "joe@bloggs.net" ]]
-
-    // Location of the plugin's issue tracker.
-//    def issueManagement = [ system: "JIRA", url: "http://jira.glass.org/browse/GPMYPLUGIN" ]
-
-    // Online location of the plugin's browseable source code.
-//    def scm = [ url: "http://svn.codehaus.org/glass-plugins/" ]
 
     def doWithWebDescriptor = { xml ->
         // TODO Implement additions to web.xml (optional), this event occurs before
