@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="0" hostname="Daniel-Acer" name="org.seethrough.glass.AuthorisationFlowTests" tests="1" time="0.754" timestamp="2013-07-11T21:27:28">
+  <properties />
+  <testcase classname="org.seethrough.glass.AuthorisationFlowTests" name="testRedirectsToGoogleOAuthSite" time="0.746" />
+  <system-out><![CDATA[--Output from testRedirectsToGoogleOAuthSite--
+]]></system-out>
+  <system-err><![CDATA[--Output from testRedirectsToGoogleOAuthSite--
+]]></system-err>
+</testsuite>

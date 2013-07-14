@@ -1,0 +1,1 @@
+You have been logged out. <g:link uri="/">Click Here</g:link> to return to the start page.

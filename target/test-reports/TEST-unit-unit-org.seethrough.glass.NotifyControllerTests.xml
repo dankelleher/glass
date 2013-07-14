@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="1" hostname="Daniel-Acer" name="org.seethrough.glass.NotifyControllerTests" tests="1" time="1.75" timestamp="2013-07-11T21:27:17">
+  <properties />
+  <testcase classname="org.seethrough.glass.NotifyControllerTests" name="testSomething" time="1.623">
+    <failure message="junit.framework.AssertionFailedError: Implement me" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: junit.framework.AssertionFailedError: Implement me
+	at org.seethrough.glass.NotifyControllerTests.testSomething(NotifyControllerTests.groovy:15)
+</failure>
+  </testcase>
+  <system-out><![CDATA[--Output from testSomething--
+]]></system-out>
+  <system-err><![CDATA[--Output from testSomething--
+]]></system-err>
+</testsuite>
