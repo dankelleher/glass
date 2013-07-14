@@ -19,7 +19,7 @@ class GlassGrailsPlugin {
 The Grails Glass Plugin allows you to quickly develop Grails apps for the upcoming Google Glass platform, via the Mirror API. 
 The plugin takes care of the following common tasks: 
 OAuth2 user authentication with Google
-Posting and adding contacts to a user's Glass timeline
+Posting and adding contacts to a Glass timeline
 Subscribing to notifications from Glass, triggered by user actions.
 '''
 
