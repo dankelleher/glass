@@ -2,11 +2,12 @@ package org.seethrough.glass
 
 import static org.junit.Assert.*
 
-import org.junit.*
-import grails.test.GrailsMock
+import org.junit.Before
+import org.junit.Test
+
+import com.google.api.client.auth.oauth2.BearerToken
 import com.google.api.client.auth.oauth2.Credential
 import com.google.api.client.auth.oauth2.CredentialStore
-import com.google.api.client.auth.oauth2.BearerToken;
 import com.google.api.client.http.BasicAuthentication
 import com.google.api.client.http.GenericUrl
 import com.google.api.client.json.JsonFactory
@@ -22,7 +23,7 @@ class CredentialStoreTests {
 	private static final String CLIENT_SECRET = "secret"
 	private static final String REFRESH_TOKEN = "refreshToken"
 	private static final long EXPIRES_IN = 3600
-	
+
 	CredentialStore credentialStore
 	User user
 
@@ -34,43 +35,38 @@ class CredentialStoreTests {
 		user.save()
     }
 
-    @After
-    void tearDown() {
-        // Tear down logic here
-    }
-
     @Test
     void testSaveCredentials() {
 		def cred = createCredentialWithAccessToken(ACCESS_TOKEN)
         credentialStore.store("id", cred)
-		
+
 		user.refresh()
-		
+
 		def storedCredential = user.credential
-		
+
 		assert ACCESS_TOKEN == storedCredential.accessToken
 		assert REFRESH_TOKEN == storedCredential.refreshToken
 		assert EXPIRES_IN == storedCredential.expirationTimeMilliseconds
     }
-	
+
 	@Test
 	void testUpdateCredentials() {
 		def cred = createCredentialWithAccessToken(ACCESS_TOKEN)
 		credentialStore.store("id", cred)
-		
+
 		cred = createCredentialWithAccessToken(NEW_ACCESS_TOKEN)
 		credentialStore.store("id", cred)
-		
+
 		//user.refresh()
 		user = User.get(user.id)
-		
+
 		def storedCredential = user.credential
-		
+
 		assert NEW_ACCESS_TOKEN == storedCredential.accessToken
 		assert REFRESH_TOKEN == storedCredential.refreshToken
 		assert EXPIRES_IN == storedCredential.expirationTimeMilliseconds
 	}
-	
+
 	private Credential createCredentialWithAccessToken(accessToken) {
 		Credential access = new Credential.Builder(
 			BearerToken.queryParameterAccessMethod()).setTransport(new MockHttpTransport())
