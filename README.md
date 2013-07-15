@@ -11,7 +11,8 @@ The plugin takes care of the following common tasks:
 
 ## Getting Started
 
-Register your application with Google as described [here](https://developers.google.com/glass/overview)
+Register your application with Google as described [here](https://developers.google.com/glass/overview).
+
 Install the plugin and add the following config to your project's Config.groovy:
 
     grails {
@@ -20,7 +21,7 @@ Install the plugin and add the following config to your project's Config.groovy:
 			    username = <username of your app's google account (for email notifications - optional)>
 			    password = <password of your app's google account (for email notifications - optional)>
 			    appname = <name of your app>
-			    imageurl = <URL to an image representing your app
+			    imageurl = <URL to an image representing your app>
 			    home {
     				controller = <controller and...>
 				    action = <action to direct to after user has been authorised by Google OAuth2>
@@ -33,7 +34,7 @@ Install the plugin and add the following config to your project's Config.groovy:
 	    }
     }
     
-You now have a working Glass application. Start up the grails project using run-app, and open a browser to the project root. You will be redirected to the Google page to  login and provide authorisation for the app to gain access to your Glass timeline. Once you have provided access, you will be redirected to whichever controller and action is set in the config.
+You now have a working Glass application. Start up the grails project using run-app, and open a browser to the project root. You will be redirected to Google to login and provide authorisation for the app to gain access to your Glass timeline. Once you have provided authorisation, you will be redirected to whichever controller and action is set in the config.
 
 ## Plugin Details
 

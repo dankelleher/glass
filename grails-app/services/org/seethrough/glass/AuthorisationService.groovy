@@ -136,7 +136,7 @@ class AuthorisationService implements InitializingBean {
 		Contact appContact = new Contact()
 		appContact.id = APP_NAME
 		appContact.displayName = APP_NAME
-		appContact.imageUrls = [IMAGE_URL]	// TODO temp
+		appContact.imageUrls = [IMAGE_URL]
 
 		Contact insertedContact = insertContact(credential, appContact)
 		
@@ -146,7 +146,7 @@ class AuthorisationService implements InitializingBean {
 
 		// Send welcome timeline item
 		TimelineItem timelineItem = new TimelineItem()
-		timelineItem.text = "Welcome to ${MirrorClient.APP_NAME}"
+		timelineItem.text = "Welcome to $APP_NAME"
 		timelineItem.notification =  new NotificationConfig().setLevel("DEFAULT")
 		timelineItem.setMenuItems([new MenuItem().setAction("REPLY")]);
 		TimelineItem insertedItem = insertTimelineItem(credential, timelineItem)
