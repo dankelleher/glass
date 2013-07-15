@@ -10,7 +10,7 @@ class MailServiceIntegrationTests {
 
     @Before
     void setUp() {
-		// config for tests	// TODO remove before publication
+		// config for tests
 		def config = new ConfigSlurper().parse(new File('test.cfg').toURI().toURL())
 		mailService.config.host = "imap.gmail.com"
 		mailService.config.username = config.username

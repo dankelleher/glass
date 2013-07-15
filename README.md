@@ -34,6 +34,10 @@ Install the plugin and add the following config to your project's Config.groovy:
 	    }
     }
     
+In addition, add the following line to UrlMappings.groovy (replacing any existing mapping for '/')
+
+    "/"(controller:"auth")
+    
 You now have a working Glass application. Start up the grails project using run-app, and open a browser to the project root. You will be redirected to Google to login and provide authorisation for the app to gain access to your Glass timeline. Once you have provided authorisation, you will be redirected to whichever controller and action is set in the config.
 
 ## Plugin Details

@@ -8,16 +8,27 @@ class NotifyController {
 	def messageHandlerService
 
 	def index() {
-		def message = request.JSON
-		def userId = message.userToken
-		def timelineItemId = message.itemId
+		def messageJson = request.JSON
+		
+		render "OK" // put at start to avoid resending message
+		
+		def userId = messageJson.userToken
+		def user = User.get(userId)
+		
+		if (user) {		
+			notify(messageJson, user)
+		} else {
+			log.error "Unknown user $userId in JSON request: $messageJson"
+		}
+	}
 
-		def text = notifyService.getMessage(userId, timelineItemId)
+	private void notify(user, messageJson) {
+		def timelineItemId = messageJson.itemId
 
-		Log.error "Received reply: " + text
+		def text = notifyService.getMessage(user.id, timelineItemId)
 
-		messageHandlerService?.reply(text)
+		log.error "Received reply: " + text
 
-		render "OK" // TODO put at start to avoid resending message
+		messageHandlerService?.reply([user: user, text: text])
 	}
 }
