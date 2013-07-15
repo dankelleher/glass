@@ -1,9 +1,9 @@
 package org.seethrough.glass
 
 import static org.junit.Assert.*
-import grails.test.mixin.TestFor;
 
-import org.junit.*
+import org.junit.Before
+import org.junit.Test
 
 class MailServiceIntegrationTests {
 	def mailService
@@ -15,11 +15,6 @@ class MailServiceIntegrationTests {
 		mailService.config.host = "imap.gmail.com"
 		mailService.config.username = config.username
 		mailService.config.password = config.password
-    }
-
-    @After
-    void tearDown() {
-        // Tear down logic here
     }
 
     @Test

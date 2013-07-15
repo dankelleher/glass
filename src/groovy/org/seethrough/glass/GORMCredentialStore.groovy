@@ -1,18 +1,18 @@
 package org.seethrough.glass
 
-import com.google.api.client.auth.oauth2.CredentialStore
-import com.google.api.client.auth.oauth2.Credential
 import grails.validation.ValidationException
 
-import org.apache.commons.logging.LogFactory;
-import org.springframework.validation.Errors
+import org.apache.commons.logging.LogFactory
+
+import com.google.api.client.auth.oauth2.Credential
+import com.google.api.client.auth.oauth2.CredentialStore
 
 /**
  * Copyright: Daniel Kelleher Date: 02.06.13 Time: 23:40
  */
 class GORMCredentialStore implements CredentialStore {
 	private static final LOG = LogFactory.getLog(this)
-	
+
     @Override
     boolean load(String userId, Credential credential) {
         User user = User.get(userId)
