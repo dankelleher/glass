@@ -28,6 +28,8 @@ class NotifyControllerTests {
 """
 
 	def retrievedUser
+	def retrievedParams
+	
 	def storedUser	
 
 	@Before
@@ -36,15 +38,13 @@ class NotifyControllerTests {
 		storedUser.id = "harold_penguin"
 		storedUser.save()
 		
-		controller.messageHandlerService = [ reply : { params -> retrievedUser = params.user}]
+		controller.messageHandlerService = [ reply : { params -> retrievedUser = params.user; retrievedParams = params}]
 		controller.notifyService = [ getMessage: { userId, timelineId -> "Sample message" }]
 	}
 	
 	@Test
     void testRetrieveUserFromRequestJSON() {
-       controller.request.contentType = "text/json"
-	   controller.request.content = REPLY_JSON
-	   controller.index()
+       sendJsonToController(REPLY_JSON)
 	   
 	   assert retrievedUser == storedUser 
     }
@@ -53,10 +53,23 @@ class NotifyControllerTests {
 	void testIgnoreMessageWhenUserInRequestJSONNotFound() {
 		def jsonWithUnknownUser = REPLY_JSON.replaceAll "harold_penguin", "jimmy_tortoise"
 		
-		controller.request.contentType = "text/json"
-		controller.request.content = jsonWithUnknownUser
-		controller.index()
+		sendJsonToController(jsonWithUnknownUser)
 		
 		assert retrievedUser == null
 	}
+
+	private sendJsonToController(String json) {
+		controller.request.contentType = "text/json"
+		controller.request.content = json
+		controller.index()
+	}
+	
+	/*
+	 * Not yet implemented
+	@Test void testControllerPassesAllJSONRequestFieldsToTheMessageHandler() {
+		sendJsonToController(REPLY_JSON)
+		
+		assert retrievedParams.request == REPLY_JSON
+	}
+	*/
 }
