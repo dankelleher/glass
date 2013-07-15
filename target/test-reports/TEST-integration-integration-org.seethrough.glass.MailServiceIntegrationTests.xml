@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="Daniel-Acer" name="org.seethrough.glass.MailServiceIntegrationTests" tests="1" time="2.496" timestamp="2013-07-11T21:27:29">
-  <properties />
-  <testcase classname="org.seethrough.glass.MailServiceIntegrationTests" name="testConnectToGMail" time="2.495" />
-  <system-out><![CDATA[--Output from testConnectToGMail--
-]]></system-out>
-  <system-err><![CDATA[--Output from testConnectToGMail--
-]]></system-err>
-</testsuite>
