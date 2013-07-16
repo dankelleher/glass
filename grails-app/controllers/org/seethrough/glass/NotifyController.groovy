@@ -16,19 +16,34 @@ class NotifyController {
 		def user = User.get(userId)
 		
 		if (user) {		
-			notify(messageJson, user)
+			notify(user, messageJson)
 		} else {
 			log.error "Unknown user $userId in JSON request: $messageJson"
 		}
 	}
 
 	private void notify(user, messageJson) {
+		def action = getAction(messageJson)
+		
 		def timelineItemId = messageJson.itemId
 
-		def text = notifyService.getMessage(user.id, timelineItemId)
+		def params = [user: user, request: messageJson]
+		
+		if (action == "reply") {
+			params << [ text : notifyService.getMessage(user.id, timelineItemId)]
+		}
 
-		log.error "Received reply: " + text
+		log.error "Received reply: " + params.text
 
-		messageHandlerService?.reply([user: user, text: text])
+		messageHandlerService?."$action"(params)
+	}
+	
+	private getAction(messageJson) {
+		// TODO in future allow multiple actions here rather than just taking the first one
+		def type = messageJson.userActions[0]?.type?.toLowerCase()
+		
+		if (type == "custom") {
+			return messageJson.userActions[0].payload.toLowerCase()
+		} else return type
 	}
 }

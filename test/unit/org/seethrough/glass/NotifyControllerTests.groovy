@@ -26,6 +26,21 @@ class NotifyControllerTests {
   ]
 }
 """
+	
+	static final String CUSTOM_ACTION_JSON = """\
+{
+  "collection": "timeline",
+  "itemId": "3hidvm0xez6r8_dacdb3103b8b604_h8rpllg",
+  "operation": "UPDATE",
+  "userToken": "harold_penguin",
+  "userActions": [
+    {
+      "type": "CUSTOM",
+      "payload": "PING"
+    }
+  ]
+}
+"""
 
 	def retrievedUser
 	def retrievedParams
@@ -64,12 +79,23 @@ class NotifyControllerTests {
 		controller.index()
 	}
 	
-	/*
-	 * Not yet implemented
 	@Test void testControllerPassesAllJSONRequestFieldsToTheMessageHandler() {
 		sendJsonToController(REPLY_JSON)
 		
-		assert retrievedParams.request == REPLY_JSON
+		["collection", "itemId", "operation", "userToken", "verifyToken"].each {
+			assert it in retrievedParams.request
+		}
+		
+		assert retrievedParams.request.userActions.type == ["REPLY"] // list here because userActions is a list
 	}
-	*/
+	
+	@Test void testCustomActionTriggersAssociatedActionInMessageHandlerService() {
+		def called = false
+		
+		controller.messageHandlerService << [ ping : { params -> called = true}]
+		
+		sendJsonToController(CUSTOM_ACTION_JSON)
+		
+		assert called
+	}
 }
