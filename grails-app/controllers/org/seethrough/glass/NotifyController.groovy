@@ -45,7 +45,6 @@ class NotifyController {
 		if (type == "custom") {
 			def action = messageJson.userActions[0].payload.toLowerCase()
 			action = action.replaceAll("\\s", "_")
-			println action
 			
 			return action
 		} else return type

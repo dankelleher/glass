@@ -173,9 +173,14 @@ class MirrorService {
                 ByteStreams.toByteArray(attachmentInputStream))
     }
 
-	String getTimelineItem(Credential credential, String timelineItemId) {
+	TimelineItem getTimelineItem(Credential credential, String timelineItemId) {
 		Mirror mirrorService = getMirror(credential)
         TimelineItem item = execute(mirrorService.timeline().get(timelineItemId))
+		return item
+	}
+	
+	String getTimelineText(Credential credential, String timelineItemId) {
+		TimelineItem item = getTimelineItem(credential, timelineItemId)
 		return item.text
 	}
 

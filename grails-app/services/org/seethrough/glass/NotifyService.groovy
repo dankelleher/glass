@@ -10,9 +10,9 @@ class NotifyService {
 	def mirrorService
 
 	def getMessage(userId, timelineId) {
-		log.error "Retrieving timeline item $timelineId for user $userId"
+		log.debug "Retrieving timeline item $timelineId for user $userId"
 
 		Credential credential = authorisationService.getCredential(userId)
-		return mirrorService.getTimelineItem(credential, timelineId)
+		return mirrorService.getTimelineText(credential, timelineId)
 	}
 }

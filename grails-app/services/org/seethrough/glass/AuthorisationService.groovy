@@ -129,19 +129,19 @@ class AuthorisationService implements InitializingBean {
 	void bootstrapNewUser(Credential credential, User user) throws IOException {
 		// Create contact
 		Contact appContact = new Contact()
-		appContact.id = APP_NAME
-		appContact.displayName = APP_NAME
-		appContact.imageUrls = [IMAGE_URL]
+		appContact.id = mirrorService.APP_NAME
+		appContact.displayName = mirrorService.APP_NAME
+		appContact.imageUrls = [mirrorService.IMAGE_URL]
 
 		Contact insertedContact = mirrorService.insertContact(credential, appContact)
 
 		// add a subscription callback link for replies or actions on timeline items
-		def callbackLink = "http://seethrough.dyndns.org:8080/TescoGlass/notify"//grailsLinkGenerator.link(controller: 'notify', absolute: true)
+		def callbackLink = grailsLinkGenerator.link(controller: 'notify', absolute: true)
 		Subscription subscription = mirrorService.insertSubscription(credential, callbackLink, user.id, "timeline")
 
 		// Send welcome timeline item
 		TimelineItem timelineItem = new TimelineItem()
-		timelineItem.text = "Welcome to $APP_NAME"
+		timelineItem.text = "Welcome to ${mirrorService.APP_NAME}"
 		timelineItem.notification =  new NotificationConfig().setLevel("DEFAULT")
 		timelineItem.setMenuItems([new MenuItem().setAction("REPLY")])
 		TimelineItem insertedItem = mirrorService.insertTimelineItem(credential, timelineItem)
