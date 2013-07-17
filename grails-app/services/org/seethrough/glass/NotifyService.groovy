@@ -7,11 +7,12 @@ class NotifyService {
 	static transactional = false
 
 	def authorisationService
+	def mirrorService
 
 	def getMessage(userId, timelineId) {
 		log.error "Retrieving timeline item $timelineId for user $userId"
 
 		Credential credential = authorisationService.getCredential(userId)
-		return MirrorClient.getTimelineItem(credential, timelineId)
+		return mirrorService.getTimelineItem(credential, timelineId)
 	}
 }

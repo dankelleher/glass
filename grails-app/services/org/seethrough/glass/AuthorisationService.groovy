@@ -1,7 +1,5 @@
 package org.seethrough.glass
 
-import static org.seethrough.glass.MirrorClient.*
-
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import org.springframework.beans.factory.InitializingBean
 
@@ -26,6 +24,8 @@ class AuthorisationService implements InitializingBean {
     public static final String GLASS_SCOPE = "https://www.googleapis.com/auth/glass.timeline https://www.googleapis.com/auth/glass.location https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email"
 
 	def grailsApplication
+	
+	def mirrorService
 
     LinkGenerator grailsLinkGenerator
     JsonFactory jsonFactory
@@ -51,7 +51,7 @@ class AuthorisationService implements InitializingBean {
         clientId = config.oauth.clientid
         clientSecret = config.oauth.clientsecret
 
-		MirrorClient.setConfig(config)
+		mirrorService.setConfig(config)
 	}
 
     /**
@@ -133,17 +133,17 @@ class AuthorisationService implements InitializingBean {
 		appContact.displayName = APP_NAME
 		appContact.imageUrls = [IMAGE_URL]
 
-		Contact insertedContact = insertContact(credential, appContact)
+		Contact insertedContact = mirrorService.insertContact(credential, appContact)
 
 		// add a subscription callback link for replies or actions on timeline items
-		def callbackLink = "http://seethrough.dyndns.org:8080/MicroProj/notify"//grailsLinkGenerator.link(controller: 'notify', absolute: true)
-		Subscription subscription = insertSubscription(credential, callbackLink, user.id, "timeline")
+		def callbackLink = "http://seethrough.dyndns.org:8080/TescoGlass/notify"//grailsLinkGenerator.link(controller: 'notify', absolute: true)
+		Subscription subscription = mirrorService.insertSubscription(credential, callbackLink, user.id, "timeline")
 
 		// Send welcome timeline item
 		TimelineItem timelineItem = new TimelineItem()
 		timelineItem.text = "Welcome to $APP_NAME"
 		timelineItem.notification =  new NotificationConfig().setLevel("DEFAULT")
 		timelineItem.setMenuItems([new MenuItem().setAction("REPLY")])
-		TimelineItem insertedItem = insertTimelineItem(credential, timelineItem)
+		TimelineItem insertedItem = mirrorService.insertTimelineItem(credential, timelineItem)
 	}
 }

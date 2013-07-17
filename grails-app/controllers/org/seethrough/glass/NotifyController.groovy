@@ -25,17 +25,17 @@ class NotifyController {
 	private void notify(user, messageJson) {
 		def action = getAction(messageJson)
 		
-		def timelineItemId = messageJson.itemId
+		def timelineItemId = "" + messageJson.itemId
 
-		def params = [user: user, request: messageJson]
+		def msgParams = [user: user, request: messageJson]
 		
 		if (action == "reply") {
-			params << [ text : notifyService.getMessage(user.id, timelineItemId)]
+			msgParams << [ text : notifyService.getMessage(user.id, timelineItemId)]
+			
+			log.error "Received reply: " + msgParams.text
 		}
 
-		log.error "Received reply: " + params.text
-
-		messageHandlerService?."$action"(params)
+		messageHandlerService?."$action"(msgParams)
 	}
 	
 	private getAction(messageJson) {
@@ -43,7 +43,11 @@ class NotifyController {
 		def type = messageJson.userActions[0]?.type?.toLowerCase()
 		
 		if (type == "custom") {
-			return messageJson.userActions[0].payload.toLowerCase()
+			def action = messageJson.userActions[0].payload.toLowerCase()
+			action = action.replaceAll("\\s", "_")
+			println action
+			
+			return action
 		} else return type
 	}
 }

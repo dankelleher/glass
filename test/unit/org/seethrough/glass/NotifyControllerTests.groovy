@@ -1,7 +1,5 @@
 package org.seethrough.glass
 
-
-
 import grails.test.mixin.*
 import org.junit.*
 
@@ -36,7 +34,7 @@ class NotifyControllerTests {
   "userActions": [
     {
       "type": "CUSTOM",
-      "payload": "PING"
+      "payload": "MY_CUSTOM_ACTION"
     }
   ]
 }
@@ -92,10 +90,23 @@ class NotifyControllerTests {
 	@Test void testCustomActionTriggersAssociatedActionInMessageHandlerService() {
 		def called = false
 		
-		controller.messageHandlerService << [ ping : { params -> called = true}]
+		controller.messageHandlerService.my_custom_action = { params -> called = true}
 		
 		sendJsonToController(CUSTOM_ACTION_JSON)
 		
 		assert called
+	}
+	
+	@Test void testActionsWithSpacesAreRoutedToMethodsWithUnderscores() {
+		def customActionJsonWithSpaces = CUSTOM_ACTION_JSON.replaceAll "MY_CUSTOM_ACTION", "MY CUSTOM ACTION"
+		
+		def called = false
+		
+		controller.messageHandlerService.my_custom_action = { params -> called = true}
+		
+		sendJsonToController(customActionJsonWithSpaces)
+		
+		assert called
+		
 	}
 }
