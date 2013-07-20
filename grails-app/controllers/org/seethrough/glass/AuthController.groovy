@@ -24,7 +24,7 @@ class AuthController {
 		def user = authorisationService.oauthUser(params.code)
 		session.user = user
 
-		authorisationService.bootstrapNewUser(authorisationService.getCredential(user), user)
+		authorisationService.bootstrapNewUser(user)
 
 		redirectToHome()
 	}

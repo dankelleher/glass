@@ -25,7 +25,7 @@ class AuthorisationService implements InitializingBean {
 
 	def grailsApplication
 	
-	def mirrorService
+	protected def storedMirrorService
 
     LinkGenerator grailsLinkGenerator
     JsonFactory jsonFactory
@@ -40,6 +40,16 @@ class AuthorisationService implements InitializingBean {
         httpTransport = GoogleNetHttpTransport.newTrustedTransport()
         credentialStore = new GORMCredentialStore()
     }
+	
+	
+	// avoid circular reference: retrieve this only when needed
+	def getMirrorService() {
+		if (!storedMirrorService) {
+			storedMirrorService = grailsApplication.mainContext.mirrorService
+		}
+		
+		return storedMirrorService
+	}
 
 	void afterPropertiesSet() {
 		readConfig()
@@ -50,8 +60,6 @@ class AuthorisationService implements InitializingBean {
 
         clientId = config.oauth.clientid
         clientSecret = config.oauth.clientsecret
-
-		mirrorService.setConfig(config)
 	}
 
     /**
@@ -126,24 +134,24 @@ class AuthorisationService implements InitializingBean {
 		return user.merge(failOnError:true)
     }
 
-	void bootstrapNewUser(Credential credential, User user) throws IOException {
+	void bootstrapNewUser(User user) throws IOException {
 		// Create contact
 		Contact appContact = new Contact()
 		appContact.id = mirrorService.APP_NAME
 		appContact.displayName = mirrorService.APP_NAME
 		appContact.imageUrls = [mirrorService.IMAGE_URL]
 
-		Contact insertedContact = mirrorService.insertContact(credential, appContact)
+		Contact insertedContact = mirrorService.insertContact(user, appContact)
 
 		// add a subscription callback link for replies or actions on timeline items
 		def callbackLink = grailsLinkGenerator.link(controller: 'notify', absolute: true)
-		Subscription subscription = mirrorService.insertSubscription(credential, callbackLink, user.id, "timeline")
+		Subscription subscription = mirrorService.insertSubscription(user, callbackLink, user.id, "timeline")
 
 		// Send welcome timeline item
 		TimelineItem timelineItem = new TimelineItem()
 		timelineItem.text = "Welcome to ${mirrorService.APP_NAME}"
 		timelineItem.notification =  new NotificationConfig().setLevel("DEFAULT")
 		timelineItem.setMenuItems([new MenuItem().setAction("REPLY")])
-		TimelineItem insertedItem = mirrorService.insertTimelineItem(credential, timelineItem)
+		TimelineItem insertedItem = mirrorService.insertTimelineItem(user, timelineItem)
 	}
 }

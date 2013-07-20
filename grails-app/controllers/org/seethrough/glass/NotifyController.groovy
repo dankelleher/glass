@@ -30,7 +30,7 @@ class NotifyController {
 		def msgParams = [user: user, request: messageJson]
 		
 		if (action == "reply") {
-			msgParams << [ text : notifyService.getMessage(user.id, timelineItemId)]
+			msgParams << [ text : notifyService.getMessage(user, timelineItemId)]
 			
 			log.error "Received reply: " + msgParams.text
 		}
