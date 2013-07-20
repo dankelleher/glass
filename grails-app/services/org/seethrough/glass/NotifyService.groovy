@@ -9,7 +9,7 @@ class NotifyService {
 	def mirrorService
 
 	def getMessage(user, timelineId) {
-		log.debug "Retrieving timeline item $timelineId for user $userId"
+		log.debug "Retrieving timeline item $timelineId for user $user.id"
 
 		return mirrorService.getTimelineText(user, timelineId)
 	}
