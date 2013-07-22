@@ -127,7 +127,7 @@ class AuthorisationService implements InitializingBean {
 
 		// retrieve the stored credentials and get the username (email address) for the user
 		Credential credential = getCredential(userId)
-		String username = UserInfoClient.getUsername(credential)
+		String username = UserInfoClient.getUsername(credential, mirrorService.APP_NAME)
 
 		// store the username in the user
         user.username = username
@@ -151,7 +151,7 @@ class AuthorisationService implements InitializingBean {
 		TimelineItem timelineItem = new TimelineItem()
 		timelineItem.text = "Welcome to ${mirrorService.APP_NAME}"
 		timelineItem.notification =  new NotificationConfig().setLevel("DEFAULT")
-		timelineItem.setMenuItems([new MenuItem().setAction("REPLY")])
+		timelineItem.addAction(TimelineAction.REPLY)
 		TimelineItem insertedItem = mirrorService.insertTimelineItem(user, timelineItem)
 	}
 }

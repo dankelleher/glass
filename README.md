@@ -46,8 +46,9 @@ The plugin adds the following objects to the Grails project:
 
   - `AuthController`: By default, the URLMappings for the plugin map the root URL '/' to this controller, which will check if there is a user in the session. If not it will redirect to the Google login screen
   - `User` domain object: Stores the Google username (email) of a user against the OAuth2 access credentials provided by Google.
-  - `AuthorisationService`: Wrapper for Google's OAuth2 libraries. Call authorisationService.getCredential(User) when posting to the Timeline
+  - `AuthorisationService`: Wrapper for Google's OAuth2 libraries.
   - `NotifyService`: Listens to subscriptions on the Glass timeline. Passes notifications on to a service named `MessageHandlerService`, if one exists.
+  - `MirrorService`: Wraps all client-server interactions with the Mirror API itself. Handles adding and removing TimelineItems, Contacts, Subscriptions and Locations
 
 ## Posting to the Timeline
 
@@ -61,25 +62,59 @@ The plugin uses the [Google Mirror API](https://developers.google.com/glass/abou
 
     class SomeServiceOrController
     
-        def authorisationService
+        def mirrorService
     
         void publish(User user, String text) {
             TimelineItem timelineItem = new TimelineItem()
-            timelineItem.setText(text)
+            timelineItem.text = text
 
-            Credential credential = authorisationService.getCredential(user)
-
-            MirrorClient.insertTimelineItem(credential, timelineItem)
+            mirrorService.insertTimelineItem(user, timelineItem)
         }
     }
 
 *Note, this plugin, and the Mirror API are both works-in-progress and are subject to change.*
 
+## Adding actions to a timeline item
+
+Actions, or [Menu Items](https://developers.google.com/glass/v1/reference/timeline#menuItems) can be added to a timeline item using the following method (added to the TimelineItem object by the plugin).
+
+    timelineItem.addAction(ACTION_NAME)
+ 
+The action name is an instance of the `TimelineAction` enum.
+
+To add custom actions (i.e. actions not built-in to Glass and not included in TimelineAction), use:
+
+   timelineItem.addCustomAction(ACTION_NAME)
+   
+where ACTION_NAME is any string.
+
+The icon used for the custom action should be stored under `static/images/actions/<converted action name>.png` where `converted action name` is the action name in lower case with spaces removed
+
 ## Subscribing to notifications
 
 The plugin automatically adds a subscription to the user's timeline when they log in. To perform actions based on this subscription, create a service called MessageHandlerService. Each method inside this service should correspond to an action on a timeline card. E.g. a method called `share` will be called on receipt of Share actions.
 
-*Note, only the Reply action is implemented at present. Other actions, including custom actions will be supported in the near future.*
+See, for example the following code:
+
+    class MessageHandlerService {
+
+        def reply(params) {
+        	// handles the REPLY built-in action. 
+        }
+	
+	def order(params) {
+		// handles the ORDER custom item.
+	}
+    }
+    
+The `params` passed to the hander method include the following:
+
+  - user: The User object representing the user that carried out the action.
+  - request: The JSON passed by Google for this notification
+  
+In addition, the `reply` action includes a `text` parameter, containing the user's reply.
+
+The method name is the lower-case form of the action name. Any spaces in the action name are removed.
 
 ## Testing, Bug Reports and Contributions
 

@@ -1,7 +1,10 @@
 import org.seethrough.glass.MirrorClient
+import org.seethrough.glass.TimelineCategory
+
+import com.google.api.services.mirror.model.TimelineItem
 
 class GlassGrailsPlugin {
-	def groupId = "org.seethrough.glass"
+	//def groupId = "org.seethrough.glass"
 	
 	def version = "0.1.2"
 	def grailsVersion = "2.0 > *"
@@ -17,17 +20,23 @@ Posting and adding contacts to a Glass timeline
 Subscribing to notifications from Glass, triggered by user actions.
 '''
 
-	def documentation = "http://glass.org/plugin/glass"
+	def documentation = "https://github.com/dankelleher/glass"
 	def organization = [name: 'SeeThrough Development', url: 'http://seethrough.dyndns.org']
 
 	def license = "APACHE"
 	def issueManagement = [system: 'GITHUB', url: 'https://github.com/dankelleher/glass/issues']
 	def scm = [url: 'https://github.com/dankelleher/glass']
 
+	def doWithDynamicMethods = {
+		TimelineItem.metaClass.mixin TimelineCategory
+	}
+	
 	def doWithApplicationContext = { applicationContext ->
 		def config = application.mergedConfig.grails.plugin.glass
 		MirrorClient.APP_NAME = config.appname
 		MirrorClient.IMAGE_URL = config.imageurl
+		
+		TimelineCategory.LINK_GENERATOR = applicationContext.getBean("grailsLinkGenerator")
 	}
 
 	def onConfigChange = { event ->
