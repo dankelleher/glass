@@ -47,7 +47,7 @@ The plugin adds the following objects to the Grails project:
   - `AuthController`: By default, the URLMappings for the plugin map the root URL '/' to this controller, which will check if there is a user in the session. If not it will redirect to the Google login screen
   - `User` domain object: Stores the Google username (email) of a user against the OAuth2 access credentials provided by Google.
   - `AuthorisationService`: Wrapper for Google's OAuth2 libraries.
-  - `NotifyService`: Listens to subscriptions on the Glass timeline. Passes notifications on to a service named `MessageHandlerService`, if one exists.
+  - `NotifyController`: Listens to subscriptions on the Glass timeline. Passes notifications on to a service named `MessageHandlerService`, if one exists.
   - `MirrorService`: Wraps all client-server interactions with the Mirror API itself. Handles adding and removing TimelineItems, Contacts, Subscriptions and Locations
 
 ## Posting to the Timeline
@@ -56,9 +56,7 @@ The plugin uses the [Google Mirror API](https://developers.google.com/glass/abou
 
     import com.google.api.services.mirror.model.TimelineItem
 
-    import com.google.api.client.auth.oauth2.Credential
     import org.seethrough.glass.User
-    import org.seethrough.glass.MirrorClient
 
     class SomeServiceOrController
     
@@ -84,11 +82,11 @@ The action name is an instance of the `TimelineAction` enum.
 
 To add custom actions (i.e. actions not built-in to Glass and not included in TimelineAction), use:
 
-   timelineItem.addCustomAction(ACTION_NAME)
+    timelineItem.addCustomAction(ACTION_NAME)
    
 where ACTION_NAME is any string.
 
-The icon used for the custom action should be stored under `static/images/actions/<converted action name>.png` where `converted action name` is the action name in lower case with spaces removed
+The icon used for the custom action should be stored under `static/images/actions/<converted action name>.png` where `converted action name` is the action name in lower case with spaces removed.
 
 ## Subscribing to notifications
 

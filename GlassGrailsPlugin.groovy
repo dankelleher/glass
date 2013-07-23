@@ -1,4 +1,3 @@
-import org.seethrough.glass.MirrorClient
 import org.seethrough.glass.TimelineCategory
 
 import com.google.api.services.mirror.model.TimelineItem
@@ -6,7 +5,7 @@ import com.google.api.services.mirror.model.TimelineItem
 class GlassGrailsPlugin {
 	//def groupId = "org.seethrough.glass"
 	
-	def version = "0.1.2"
+	def version = "0.2"
 	def grailsVersion = "2.0 > *"
 
 	def title = "Glass Plugin"
@@ -32,16 +31,6 @@ Subscribing to notifications from Glass, triggered by user actions.
 	}
 	
 	def doWithApplicationContext = { applicationContext ->
-		def config = application.mergedConfig.grails.plugin.glass
-		MirrorClient.APP_NAME = config.appname
-		MirrorClient.IMAGE_URL = config.imageurl
-		
 		TimelineCategory.LINK_GENERATOR = applicationContext.getBean("grailsLinkGenerator")
-	}
-
-	def onConfigChange = { event ->
-		def config = application.mergedConfig.grails.plugin.glass
-		MirrorClient.APP_NAME = config.appname
-		MirrorClient.IMAGE_URL = config.imageurl
 	}
 }
