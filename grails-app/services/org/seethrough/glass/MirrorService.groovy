@@ -28,6 +28,9 @@ class MirrorService implements InitializingBean {
 	public static String APP_NAME = "Default Glass App Name"	// set from config
 	public static String IMAGE_URL = ""
 	
+	private static String TEST_ROOT_URL
+	private static String TEST_SERVICE_PATH 
+	
 	def authorisationService
 	def grailsApplication
 	
@@ -40,6 +43,9 @@ class MirrorService implements InitializingBean {
 	private void setConfig(config) {
 		APP_NAME = config.appname
 		IMAGE_URL = config.imageurl
+		
+		TEST_ROOT_URL = config.mirror?.rooturl
+		TEST_SERVICE_PATH = config.mirror?.servicepath
 	}
 
 	private def execute(executable) {
@@ -47,8 +53,10 @@ class MirrorService implements InitializingBean {
 		try {
 			result = executable.execute()
 		} catch (GoogleJsonResponseException e) {
+			e.printStackTrace()
 			log.error e.details
 		} catch (Exception e) {	// exception occurring with demo glass app... TODO remove for live
+			e.printStackTrace()
 			log.error e.message
 			// swallow it so we don't roll-back the transaction
 		}
@@ -72,9 +80,14 @@ class MirrorService implements InitializingBean {
 	}
 
 	private Mirror.Builder createTestBuilder(Credential credential) {
-		createBuilder(credential)
-			.setRootUrl("https://seethroughtest.appspot.com/")
-			.setServicePath("_ah/api/mirror/v1/")
+		Mirror.Builder builder = createBuilder(credential)
+		
+		if (TEST_ROOT_URL) {
+			builder.setRootUrl(TEST_ROOT_URL)
+					.setServicePath(TEST_SERVICE_PATH)
+		}
+		
+		return builder
 	}
 
     Contact insertContact(User user, Contact contact) throws IOException {
@@ -142,9 +155,9 @@ class MirrorService implements InitializingBean {
         execute(getMirror(user).subscriptions().delete(id))
     }
 
-    SubscriptionsListResponse listSubscriptions(User user) throws IOException {
+    List<Subscription> listSubscriptions(User user) throws IOException {
         Mirror.Subscriptions subscriptions = getMirror(user).subscriptions()
-        return execute(subscriptions.list())
+        return execute(subscriptions.list()).items
     }
 
     /**

@@ -28,6 +28,8 @@ class MailService implements InitializingBean {
 	}
 
 	def readMail() {
+		if (!config.username) return
+		
 		def session = Session.getDefaultInstance(new Properties(), null)
 		def store = session.getStore("imaps")
 		def inbox

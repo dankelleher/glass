@@ -1,0 +1,1 @@
+You have now registered this app on Google Glass

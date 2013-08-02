@@ -11,6 +11,7 @@ class NotifyController {
 		def messageJson = request.JSON
 		
 		render "OK" // put at start to avoid resending message
+		response.flushBuffer()
 		
 		def userId = messageJson.userToken
 		def user = User.get(userId)

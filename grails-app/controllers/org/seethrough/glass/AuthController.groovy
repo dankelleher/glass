@@ -6,7 +6,10 @@ class AuthController {
 	def redirectParams
 
 	def getRedirectParams() {
-		if (!redirectParams) redirectParams = grailsApplication.mergedConfig.grails.plugin.glass.home
+		if (!redirectParams) {
+			redirectParams = grailsApplication.mergedConfig.grails.plugin.glass.home
+			if (!redirectParams) redirectParams = [action: "connected"]	// default here if no redirect params in config
+		}
 
 		return redirectParams
 	}
@@ -38,4 +41,6 @@ class AuthController {
 	def logout() {
 		session.removeAttribute('user')
 	}
+	
+	def connected() {} // default callback action if no redirect params in config 
 }

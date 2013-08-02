@@ -2,8 +2,6 @@ grails {
 	plugin {
 		glass {
 			host = "imap.gmail.com"
-			username = "a valid gmail address"
-			password = "the gmail password"
 			appname = "Default Glass App"
 			imageUrl = ""
 			oauth {

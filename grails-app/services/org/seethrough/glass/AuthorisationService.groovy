@@ -24,10 +24,10 @@ class AuthorisationService implements InitializingBean {
     public static final String GLASS_SCOPE = "https://www.googleapis.com/auth/glass.timeline https://www.googleapis.com/auth/glass.location https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email"
 
 	def grailsApplication
+	def grailsLinkGenerator
 	
 	protected def storedMirrorService
-
-    LinkGenerator grailsLinkGenerator
+    
     JsonFactory jsonFactory
     HttpTransport httpTransport
     CredentialStore credentialStore
@@ -49,6 +49,10 @@ class AuthorisationService implements InitializingBean {
 		}
 		
 		return storedMirrorService
+	}
+	
+	def setMirrorServiceForTests(def mirrorService) {
+		storedMirrorService = mirrorService
 	}
 
 	void afterPropertiesSet() {
@@ -144,8 +148,7 @@ class AuthorisationService implements InitializingBean {
 		Contact insertedContact = mirrorService.insertContact(user, appContact)
 
 		// add a subscription callback link for replies or actions on timeline items
-		def callbackLink = grailsLinkGenerator.link(controller: 'notify', absolute: true)
-		Subscription subscription = mirrorService.insertSubscription(user, callbackLink, user.id, "timeline")
+		addSubscription(user)
 
 		// Send welcome timeline item
 		TimelineItem timelineItem = new TimelineItem()
@@ -153,5 +156,24 @@ class AuthorisationService implements InitializingBean {
 		timelineItem.notification =  new NotificationConfig().setLevel("DEFAULT")
 		timelineItem.addAction(TimelineAction.REPLY)
 		TimelineItem insertedItem = mirrorService.insertTimelineItem(user, timelineItem)
+	}
+	
+	void addSubscription(user) {
+		if (!isUserSubscribed(user)) {
+			def callbackLink = createCallbackUrl()
+			Subscription subscription = mirrorService.insertSubscription(user, callbackLink, user.id, "timeline")
+		}
+	}
+	
+	String createCallbackUrl() {
+		grailsLinkGenerator.link(controller: 'notify', absolute: true)
+	}
+	
+	boolean isUserSubscribed(User user) {
+		def expectedCallbackUrl = createCallbackUrl()
+		
+		def subscriptions = mirrorService.listSubscriptions(user)
+		
+		return subscriptions.any { it.callbackUrl == expectedCallbackUrl }
 	}
 }
