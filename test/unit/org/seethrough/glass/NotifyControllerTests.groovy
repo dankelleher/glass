@@ -2,10 +2,8 @@ package org.seethrough.glass
 
 import grails.test.mixin.*
 import org.junit.*
+import java.awt.image.BufferedImage
 
-/**
- * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
- */
 @TestFor(NotifyController)
 @Mock([User])
 class NotifyControllerTests {
@@ -35,6 +33,20 @@ class NotifyControllerTests {
     {
       "type": "CUSTOM",
       "payload": "MY_CUSTOM_ACTION"
+    }
+  ]
+}
+"""
+	static final String SHARE_JSON = """\
+{
+  "collection": "timeline",
+  "itemId": "3hidvm0xez6r8_dacdb3103b8b604_h8rpllg",
+  "operation": "INSERT",
+  "userToken": "harold_penguin",
+  "verifyToken": "random_hash_to_verify_referer",
+  "userActions": [
+    {
+      "type": "SHARE"
     }
   ]
 }
@@ -108,5 +120,17 @@ class NotifyControllerTests {
 		
 		assert called
 		
+	}
+	
+	@Test void testControllerAddsAttachmentImagesToMessageHandlerParametersIfTheyExist() {
+		controller.messageHandlerService.share = { params -> retrievedParams = params }
+		controller.notifyService.getAttachedImages = { user, timelineItemId ->
+			assert timelineItemId == "3hidvm0xez6r8_dacdb3103b8b604_h8rpllg"
+			return [new BufferedImage(1, 1, 1)]
+		}
+		
+		sendJsonToController(SHARE_JSON)
+		
+		assert retrievedParams.attachments.size() == 1
 	}
 }

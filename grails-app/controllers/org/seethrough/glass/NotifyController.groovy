@@ -31,9 +31,13 @@ class NotifyController {
 		def msgParams = [user: user, request: messageJson]
 		
 		if (action == "reply") {
-			msgParams << [ text : notifyService.getMessage(user, timelineItemId)]
+			msgParams.text == notifyService.getMessage(user, timelineItemId)
 			
-			log.error "Received reply: " + msgParams.text
+			log.info "Received reply: " + msgParams.text
+		}
+		
+		if (action == "share") {
+			msgParams.attachments = notifyService.getAttachedImages(user, timelineItemId)
 		}
 
 		messageHandlerService?."$action"(msgParams)

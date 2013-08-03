@@ -4,3 +4,5 @@ test.cfg
 *.zip
 *.log
 plugin.xml
+/examples/TellAJoke/target
+/examples/TellAJoke/target-eclipse
