@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="0" hostname="Daniel-Acer" name="tellajoke.WelcomeServiceTests" tests="1" time="0.213" timestamp="2013-08-03T07:34:59">
+  <properties />
+  <testcase classname="tellajoke.WelcomeServiceTests" name="testCustomCard" time="0.202" />
+  <system-out><![CDATA[--Output from testCustomCard--
+]]></system-out>
+  <system-err><![CDATA[--Output from testCustomCard--
+]]></system-err>
+</testsuite>

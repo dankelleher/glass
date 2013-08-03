@@ -11,7 +11,7 @@ The plugin takes care of the following common tasks:
 
 ## Getting Started
 
-Register your application with Google as described [here](https://developers.google.com/glass/overview).
+Register your application with Google as described [here](https://developers.google.com/glass/quickstart/java).
 
 Install the plugin and add the following config to your project's Config.groovy:
 
@@ -24,11 +24,11 @@ Install the plugin and add the following config to your project's Config.groovy:
 			    imageurl = <URL to an image representing your app>
 			    home {
     				controller = <controller and...>
-				    action = <action to direct to after user has been authorised by Google OAuth2>
+    				action = <action to direct to after user has been authorised by Google OAuth2 (optional. Will default to a simple "connected" message>
 			    }
 			    oauth {
     				clientid = <client ID provided by Google>
-				    clientsecret = <client secret provided by Google>
+    				clientsecret = <client secret provided by Google>
 			    }
 		    }
 	    }
@@ -39,6 +39,10 @@ In addition, add the following line to UrlMappings.groovy (replacing any existin
     "/"(controller:"auth")
     
 You now have a working Glass application. Start up the grails project using run-app, and open a browser to the project root. You will be redirected to Google to login and provide authorisation for the app to gain access to your Glass timeline. Once you have provided authorisation, you will be redirected to whichever controller and action is set in the config.
+
+## Examples
+
+An example application, TellAJoke, can be found in the [examples](examples/) directory. This is a very simple application, that posts a random Chuck Norris joke of questionable comic value to the user's timeline on the user's request. It demonstrates the basics of posting to the timeline and responding to notifications. For more information see the [readme](examples/TellAJoke/README.md).
 
 ## Plugin Details
 
@@ -86,7 +90,7 @@ To add custom actions (i.e. actions not built-in to Glass and not included in Ti
    
 where ACTION_NAME is any string.
 
-The icon used for the custom action should be stored under `static/images/actions/<converted action name>.png` where `converted action name` is the action name in lower case with spaces removed.
+The icon used for the custom action should be stored under `static/images/actions/<converted action name>.png` where `converted action name` is the action name in lower case with spaces removed (e.g "Say Hello" becomes "sayhello").
 
 ## Subscribing to notifications
 
@@ -113,6 +117,12 @@ The `params` passed to the hander method include the following:
 In addition, the `reply` action includes a `text` parameter, containing the user's reply.
 
 The method name is the lower-case form of the action name. Any spaces in the action name are removed.
+
+## Welcome Cards
+
+When a user logs in, by default, the plugin will send a card with the text "Welcome to APPNAME" to the timeline, with a single menu item: Reply. To customise this welcome message, create a service called `WelcomeService`, with a method:
+
+    TimelineItem makeWelcomeCard()    
 
 ## Testing, Bug Reports and Contributions
 

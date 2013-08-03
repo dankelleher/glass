@@ -1,0 +1,10 @@
+Testsuite: tellajoke.MessageHandlerServiceTests
+Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 0.98 sec
+------------- Standard Output ---------------
+--Output from testReplyTakesResultFromJokeServiceAndPutsItIntoACard--
+------------- ---------------- ---------------
+------------- Standard Error -----------------
+--Output from testReplyTakesResultFromJokeServiceAndPutsItIntoACard--
+------------- ---------------- ---------------
+
+Testcase: testReplyTakesResultFromJokeServiceAndPutsItIntoACard took 0.583 sec

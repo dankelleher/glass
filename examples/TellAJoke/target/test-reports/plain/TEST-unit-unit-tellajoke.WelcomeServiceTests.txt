@@ -1,0 +1,10 @@
+Testsuite: tellajoke.WelcomeServiceTests
+Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 0.213 sec
+------------- Standard Output ---------------
+--Output from testCustomCard--
+------------- ---------------- ---------------
+------------- Standard Error -----------------
+--Output from testCustomCard--
+------------- ---------------- ---------------
+
+Testcase: testCustomCard took 0.202 sec

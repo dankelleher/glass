@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="0" hostname="Daniel-Acer" name="tellajoke.MessageHandlerServiceTests" tests="1" time="0.98" timestamp="2013-08-03T07:34:58">
+  <properties />
+  <testcase classname="tellajoke.MessageHandlerServiceTests" name="testReplyTakesResultFromJokeServiceAndPutsItIntoACard" time="0.582" />
+  <system-out><![CDATA[--Output from testReplyTakesResultFromJokeServiceAndPutsItIntoACard--
+]]></system-out>
+  <system-err><![CDATA[--Output from testReplyTakesResultFromJokeServiceAndPutsItIntoACard--
+]]></system-err>
+</testsuite>
