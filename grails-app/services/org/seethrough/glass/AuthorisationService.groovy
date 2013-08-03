@@ -1,6 +1,7 @@
 package org.seethrough.glass
 
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
+import org.codehaus.groovy.runtime.typehandling.GroovyCastException;
 import org.springframework.beans.factory.InitializingBean
 
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow
@@ -25,7 +26,7 @@ class AuthorisationService implements InitializingBean {
 
 	def grailsApplication
 	def grailsLinkGenerator
-	
+	def welcomeService
 	protected def storedMirrorService
     
     JsonFactory jsonFactory
@@ -150,12 +151,32 @@ class AuthorisationService implements InitializingBean {
 		// add a subscription callback link for replies or actions on timeline items
 		addSubscription(user)
 
-		// Send welcome timeline item
-		TimelineItem timelineItem = new TimelineItem()
-		timelineItem.text = "Welcome to ${mirrorService.APP_NAME}"
-		timelineItem.notification =  new NotificationConfig().setLevel("DEFAULT")
-		timelineItem.addAction(TimelineAction.REPLY)
-		TimelineItem insertedItem = mirrorService.insertTimelineItem(user, timelineItem)
+		sendWelcomeCard(user)
+	}
+	
+	private void sendWelcomeCard(user) {
+		TimelineItem welcomeCard
+		
+		if (welcomeService && welcomeService.getMetaClass().respondsTo(welcomeService, "makeWelcomeCard")) {
+			try {
+				welcomeCard = welcomeService.makeWelcomeCard()
+			} catch (GroovyCastException ex) {
+				throw new GlassPluginRuntimeException("WelcomeService makeWelcomeCard() should return a TimelineItem")
+			}
+		} else {
+			welcomeCard = makeDefaultWelcomeCard()
+		}
+		
+		mirrorService.insertTimelineItem(user, welcomeCard)
+	}
+	
+	private TimelineItem makeDefaultWelcomeCard() { 
+		TimelineItem welcomeCard = new TimelineItem()
+		welcomeCard.text = "Welcome to ${mirrorService.APP_NAME}"
+		welcomeCard.notification =  new NotificationConfig().setLevel("DEFAULT")
+		welcomeCard.addAction(TimelineAction.REPLY)
+		
+		return welcomeCard
 	}
 	
 	void addSubscription(user) {
