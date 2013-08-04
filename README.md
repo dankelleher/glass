@@ -94,7 +94,7 @@ The icon used for the custom action should be stored under `static/images/action
 
 ## Subscribing to notifications
 
-The plugin automatically adds a subscription to the user's timeline when they log in. To perform actions based on this subscription, create a service called MessageHandlerService. Each method inside this service should correspond to an action on a timeline card. E.g. a method called `share` will be called on receipt of Share actions.
+The plugin automatically adds a subscription to the user's timeline when they log in. When the user performs an action on a timeline card, the plugin will be notified. To perform actions based on these notifictions, create a service called MessageHandlerService. Each method inside this service should correspond to an action on a timeline card. E.g. a method called `share` will be called on receipt of Share actions.
 
 See, for example the following code:
 
@@ -114,7 +114,10 @@ The `params` passed to the hander method include the following:
   - user: The User object representing the user that carried out the action.
   - request: The JSON passed by Google for this notification
   
-In addition, the `reply` action includes a `text` parameter, containing the user's reply.
+In addition:
+
+  - the `reply` action includes a `text` parameter, containing the user's reply.
+  - the `share` action includes an `attachments` parameter, containing a list of any images shared by the action (as a `java.awt.image.BufferedImage`).
 
 The method name is the lower-case form of the action name. Any spaces in the action name are removed.
 
