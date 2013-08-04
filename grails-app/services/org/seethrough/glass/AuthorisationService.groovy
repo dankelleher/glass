@@ -182,7 +182,7 @@ class AuthorisationService implements InitializingBean {
 	void addSubscription(user) {
 		if (!isUserSubscribed(user)) {
 			def callbackLink = createCallbackUrl()
-			Subscription subscription = mirrorService.insertSubscription(user, callbackLink, user.id, "timeline")
+			Subscription subscription = mirrorService.insertSubscription(user, callbackLink, "timeline")
 		}
 	}
 	
