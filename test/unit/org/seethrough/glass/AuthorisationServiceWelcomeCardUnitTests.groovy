@@ -52,7 +52,7 @@ class AuthorisationServiceWelcomeCardUnitTests {
 		mockMirrorService = [
 			APP_NAME : appName,
 			insertContact : { user, appContact -> },
-			insertSubscription : { user, link, id, type -> },
+			insertSubscription : { user, link, type -> },
 			listSubscriptions : { user -> [] }
 			] 
 		service.storedMirrorService = mockMirrorService

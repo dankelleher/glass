@@ -16,31 +16,57 @@ class NotifyController {
 		def userId = messageJson.userToken
 		def user = User.get(userId)
 		
-		if (user) {		
+		if (user) {	
 			notify(user, messageJson)
+			
 		} else {
 			log.error "Unknown user $userId in JSON request: $messageJson"
 		}
 	}
 
 	private void notify(user, messageJson) {
-		def action = getAction(messageJson)
-		
-		def timelineItemId = "" + messageJson.itemId
-
 		def msgParams = [user: user, request: messageJson]
+
+		def action
 		
-		if (action == "reply") {
-			msgParams.text == notifyService.getMessage(user, timelineItemId)
-			
-			log.info "Received reply: " + msgParams.text
-		}
-		
-		if (action == "share") {
-			msgParams.attachments = notifyService.getAttachedImages(user, timelineItemId)
+		if (isTimelineNotification(messageJson)) {
+			action = prepareTimelineNotification(messageJson, msgParams, user)
+		} else if (isLocationNotification(messageJson)) {
+			action = prepareLocationNotification(msgParams, user)
 		}
 
 		messageHandlerService?."$action"(msgParams)
+	}
+	
+	private boolean isTimelineNotification(json) {
+		return json.collection == "timeline"
+	}
+	
+	private boolean isLocationNotification(json) {
+		return json.collection == "locations"
+	}
+	
+	private String prepareLocationNotification(msgParams, user) {
+		def location = notifyService.getLocation(user)
+		msgParams.latitude = location.latitude
+		msgParams.longitude = location.longitude
+		return "location"
+	}
+
+	private String prepareTimelineNotification(messageJson, msgParams, user) {
+		def action = getAction(messageJson)
+		def timelineItemId = "" + messageJson.itemId
+		
+		if (action == "reply") {
+			msgParams.text == notifyService.getMessage(user, timelineItemId)
+
+			log.info "Received reply: " + msgParams.text
+		}
+
+		if (action == "share") {
+			msgParams.attachments = notifyService.getAttachedImages(user, timelineItemId)
+		}
+		return action
 	}
 	
 	private getAction(messageJson) {

@@ -3,21 +3,23 @@ package org.seethrough.glass
 import java.io.IOException
 import java.io.InputStream
 
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.InitializingBean
 
 import com.google.api.client.auth.oauth2.Credential
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.googleapis.json.GoogleJsonResponseException
 import com.google.api.client.http.ByteArrayContent
 import com.google.api.client.http.GenericUrl
 import com.google.api.client.http.HttpResponse
 import com.google.api.client.http.HttpTransport
 import com.google.api.client.json.jackson.JacksonFactory
-import com.google.api.client.util.ByteStreams;
+import com.google.api.client.util.ByteStreams
 import com.google.api.services.mirror.Mirror
+import com.google.api.services.mirror.Mirror.Locations
 import com.google.api.services.mirror.model.Attachment
 import com.google.api.services.mirror.model.Contact
 import com.google.api.services.mirror.model.ContactsListResponse
+import com.google.api.services.mirror.model.Location;
 import com.google.api.services.mirror.model.Subscription
 import com.google.api.services.mirror.model.SubscriptionsListResponse
 import com.google.api.services.mirror.model.TimelineItem
@@ -233,5 +235,9 @@ class MirrorService implements InitializingBean {
 	List<String> getAttachmentIds(User user, String timelineItemId) {
 		TimelineItem item = execute(getMirror(user).timeline().get(timelineItemId))
 		return item.attachments*.id
+	}
+	
+	Location getLocation(User user) {
+		return execute(getMirror(user).locations().get("latest"))
 	}
 }

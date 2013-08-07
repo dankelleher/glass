@@ -54,4 +54,15 @@ class NotifyServiceTests {
 			assert height == 333
 		}
 	}
+	
+	@Test
+	void testGetLocationCallsMirrorService() {
+		def called
+		
+		service.mirrorService.getLocation = { user -> called = true }
+		
+		service.getLocation(user)
+		
+		assert called
+	}
 }

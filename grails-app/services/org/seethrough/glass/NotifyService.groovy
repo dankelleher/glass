@@ -23,6 +23,10 @@ class NotifyService {
 		}
 	}
 	
+	def getLocation(user) {
+		return mirrorService.getLocation(user)
+	}
+	
 	private InputStream retrieveAttachment(User user, String timelineItemId, String attachmentId) {
 		return mirrorService.getAttachmentInputStream(user, timelineItemId, attachmentId)
 	}
