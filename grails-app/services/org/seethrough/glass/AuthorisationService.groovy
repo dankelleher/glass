@@ -22,7 +22,8 @@ import com.google.api.services.mirror.model.Subscription
 import com.google.api.services.mirror.model.TimelineItem
 
 class AuthorisationService implements InitializingBean {
-    public static final String GLASS_SCOPE = "https://www.googleapis.com/auth/glass.timeline https://www.googleapis.com/auth/glass.location https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email"
+    static final String BASE_GLASS_SCOPE = "https://www.googleapis.com/auth/glass.timeline https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email"
+	static final String LOCATION_SCOPE = "https://www.googleapis.com/auth/glass.location"
 
 	def grailsApplication
 	def grailsLinkGenerator
@@ -35,6 +36,7 @@ class AuthorisationService implements InitializingBean {
 
     String clientId
     String clientSecret
+	boolean locationOn = false
 
     AuthorisationService() {
         jsonFactory = new JacksonFactory()
@@ -65,6 +67,11 @@ class AuthorisationService implements InitializingBean {
 
         clientId = config.oauth.clientid
         clientSecret = config.oauth.clientsecret
+		locationOn = config.locationOn
+	}
+	
+	String getGlassScope() {
+		return BASE_GLASS_SCOPE + (locationOn ? " " + LOCATION_SCOPE : "")
 	}
 
     /**
@@ -75,7 +82,7 @@ class AuthorisationService implements InitializingBean {
                 httpTransport,
                 jsonFactory,
                 clientId, clientSecret,
-                Collections.singleton(GLASS_SCOPE))
+                Collections.singleton(glassScope))
             .setAccessType("offline")
             .setCredentialStore(credentialStore)
             .build()
@@ -183,7 +190,10 @@ class AuthorisationService implements InitializingBean {
 		if (!isUserSubscribed(user)) {
 			def callbackLink = createCallbackUrl()
 			mirrorService.insertSubscription(user, callbackLink, "timeline")
-			mirrorService.insertSubscription(user, callbackLink, "locations")
+			
+			if (locationOn) {
+				mirrorService.insertSubscription(user, callbackLink, "locations")
+			}
 		}
 	}
 	
