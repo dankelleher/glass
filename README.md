@@ -22,6 +22,7 @@ Install the plugin and add the following config to your project's Config.groovy:
 			    password = <password of your app's google account (for email notifications - optional)>
 			    appname = <name of your app>
 			    imageurl = <URL to an image representing your app>
+			    locationOn = <set to true if you wish to subscribe to location notifications - false by default. See below>
 			    home {
     				controller = <controller and...>
     				action = <action to direct to after user has been authorised by Google OAuth2 (optional. Will default to a simple "connected" message>
@@ -118,8 +119,13 @@ In addition:
 
   - the `reply` action includes a `text` parameter, containing the user's reply.
   - the `share` action includes an `attachments` parameter, containing a list of any images shared by the action (as a `java.awt.image.BufferedImage`).
+  - the `location` action includes `longitude` and `latitude` parameters (see below).
 
 The method name is the lower-case form of the action name. Any spaces in the action name are removed.
+
+## Location Notifications
+
+If locationOn is set to true in the config, the app will receive regular location notifications from Glass. To receive location notifications, add a `location(params)` method to the `MessageHandlerService`. Params will contain `longitude` and `latitude` fields.
 
 ## Welcome Cards
 
