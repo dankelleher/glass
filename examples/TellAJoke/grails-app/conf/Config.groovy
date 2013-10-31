@@ -62,6 +62,7 @@ grails.hibernate.cache.queries = false
 environments {
     development {
         grails.logging.jul.usebridge = true
+		grails.serverURL = "http://seethrough.dyndns.org:8080/TellAJoke"
     }
     production {
         grails.logging.jul.usebridge = false
@@ -93,8 +94,7 @@ log4j = {
 grails {
 	plugin {
 		glass {
-			appname = "TellAJoke"
-			imageurl = "https://lh4.googleusercontent.com/-CcxkZCExymI/AAAAAAAAAAI/AAAAAAAAAAA/kQ4DpPKmri8/s48-c-k/photo.jpg"			
+			appname = "TellAJoke"			
 			oauth {
 				clientid = "dummy id"
 				clientsecret = "dummy secret"   // TODO encrypt or store in a secure key-store

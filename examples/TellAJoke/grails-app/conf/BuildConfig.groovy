@@ -60,8 +60,9 @@ grails.project.dependency.resolution = {
 
         compile ':cache:1.0.1'
 		compile ":rest:0.7"
-		compile ":glass:0.3"
 				
 		test ":auto-test:1.0.1"
     }
 }
+
+grails.plugin.location.glass = "../.."
