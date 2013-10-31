@@ -156,7 +156,7 @@ class MirrorService implements InitializingBean {
 
     List<Subscription> listSubscriptions(User user) throws IOException {
         Mirror.Subscriptions subscriptions = getMirror(user).subscriptions()
-        return execute(subscriptions.list()).items
+        return subscriptions?.list() ? execute(subscriptions.list()).items : null
     }
 
     /**
