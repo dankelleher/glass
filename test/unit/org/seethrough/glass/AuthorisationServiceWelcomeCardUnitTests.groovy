@@ -46,7 +46,9 @@ class AuthorisationServiceWelcomeCardUnitTests {
 		service = new AuthorisationService()
 		
 		// stub out link generator to create dummy link
-        service.grailsLinkGenerator = [link : { params ->  "http://some.host.name/app" }]
+        service.grailsLinkGenerator = [
+			link : { params ->  "http://some.host.name/app" },
+			resource : { params -> }]
 		
 		// stub out mirror service
 		mockMirrorService = [

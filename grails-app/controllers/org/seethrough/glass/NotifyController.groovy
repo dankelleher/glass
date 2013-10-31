@@ -17,8 +17,7 @@ class NotifyController {
 		def user = User.get(userId)
 		
 		if (user) {	
-			notify(user, messageJson)
-			
+			notify(user, messageJson)			
 		} else {
 			log.error "Unknown user $userId in JSON request: $messageJson"
 		}
@@ -58,7 +57,7 @@ class NotifyController {
 		def timelineItemId = "" + messageJson.itemId
 		
 		if (action == "reply") {
-			msgParams.text == notifyService.getMessage(user, timelineItemId)
+			msgParams.text = notifyService.getMessage(user, timelineItemId)
 
 			log.info "Received reply: " + msgParams.text
 		}

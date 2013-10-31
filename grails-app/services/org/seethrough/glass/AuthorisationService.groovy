@@ -147,18 +147,24 @@ class AuthorisationService implements InitializingBean {
     }
 
 	void bootstrapNewUser(User user) throws IOException {
-		// Create contact
-		Contact appContact = new Contact()
-		appContact.id = mirrorService.APP_NAME
-		appContact.displayName = mirrorService.APP_NAME
-		appContact.imageUrls = [mirrorService.IMAGE_URL]
-
-		Contact insertedContact = mirrorService.insertContact(user, appContact)
+		addContact(user)
 
 		// add a subscription callback link for replies or actions on timeline items
 		addSubscription(user)
 
 		sendWelcomeCard(user)
+	}
+
+	private addContact(User user) {
+		def imageURL = grailsLinkGenerator.resource(dir: "images", file: "contact.png", absolute: true)
+		
+		Contact appContact = new Contact()
+		appContact.id = mirrorService.APP_NAME
+		appContact.displayName = mirrorService.APP_NAME
+		appContact.imageUrls = [imageURL]
+
+		log.debug "Inserting contact $appContact"
+		mirrorService.insertContact(user, appContact)
 	}
 	
 	private void sendWelcomeCard(user) {

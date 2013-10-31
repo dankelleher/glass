@@ -28,7 +28,6 @@ import com.google.api.services.mirror.model.TimelineListResponse
 class MirrorService implements InitializingBean {
 
 	public static String APP_NAME = "Default Glass App Name"	// set from config
-	public static String IMAGE_URL = ""
 	
 	private static String TEST_ROOT_URL
 	private static String TEST_SERVICE_PATH 
@@ -44,7 +43,6 @@ class MirrorService implements InitializingBean {
 
 	private void setConfig(config) {
 		APP_NAME = config.appname
-		IMAGE_URL = config.imageurl
 		
 		TEST_ROOT_URL = config.mirror?.rooturl
 		TEST_SERVICE_PATH = config.mirror?.servicepath
@@ -53,6 +51,7 @@ class MirrorService implements InitializingBean {
 	private def execute(executable) {
 		def result
 		try {
+			log.debug "Executing: $executable"
 			result = executable.execute()
 		} catch (GoogleJsonResponseException e) {
 			e.printStackTrace()
@@ -139,7 +138,6 @@ class MirrorService implements InitializingBean {
 
         Subscription subscription = new Subscription()
         subscription.with {
-            // Alternatively, subscribe to "locations"
             collection = collectionStr
             callbackUrl = callbackUrlStr
             userToken = user.id
@@ -168,6 +166,7 @@ class MirrorService implements InitializingBean {
      * @param item the item to insert
      */
     TimelineItem insertTimelineItem(User user, TimelineItem item) throws IOException {
+		log.debug "Inserting card " + item
         return execute(getMirror(user).timeline().insert(item))
     }
 
