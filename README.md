@@ -18,15 +18,7 @@ Install the plugin and add the following config to your project's Config.groovy:
     grails {
         plugin {
 		    glass {
-			    username = <username of your app's google account (for email notifications - optional)>
-			    password = <password of your app's google account (for email notifications - optional)>
 			    appname = <name of your app>
-			    imageurl = <URL to an image representing your app>
-			    locationOn = <set to true if you wish to subscribe to location notifications - false by default. See below>
-			    home {
-    				controller = <controller and...>
-    				action = <action to direct to after user has been authorised by Google OAuth2 (optional. Will default to a simple "connected" message>
-			    }
 			    oauth {
     				clientid = <client ID provided by Google>
     				clientsecret = <client secret provided by Google>
@@ -132,6 +124,41 @@ If locationOn is set to true in the config, the app will receive regular locatio
 When a user logs in, by default, the plugin will send a card with the text "Welcome to APPNAME" to the timeline, with a single menu item: Reply. To customise this welcome message, create a service called `WelcomeService`, with a method:
 
     TimelineItem makeWelcomeCard()    
+
+## Additional customisation
+
+Aside from the mandatory configuration described above, below are descriptions of all available config options.
+
+    grails {
+        plugin {
+		    glass {
+			    username = <username of your app's google account (for email notifications - optional)>
+			    password = <password of your app's google account (for email notifications - optional)>
+			    appname = <name of your app>
+			    locationOn = <set to true if you wish to subscribe to location notifications - false by default. See below>
+			    home {
+    				controller = <controller and...>
+    				action = <action to direct to after user has been authorised by Google OAuth2 (optional. Will default to a simple "connected" message>
+			    }
+			    oauth {
+    				clientid = <client ID provided by Google>
+    				clientsecret = <client secret provided by Google>
+			    }
+		    }
+	    }
+    }
+
+## Deploying your Glassware
+
+The only thing to remember when deploying your app is that the OAuth2 callback URL needs to be `https`. The best way to achieve this is to add the following to your `Config.groovy` file:
+
+environments {
+    production {
+        grails.serverURL = "https://YOUR_SERVER/YOUR_APP_NAME"
+    }
+}
+
+Of course you will also need a valid digital certificate for your site.
 
 ## Testing, Bug Reports and Contributions
 
