@@ -5,7 +5,7 @@ import com.google.api.services.mirror.model.TimelineItem
 class GlassGrailsPlugin {
 	//def groupId = "org.seethrough.glass"
 	
-	def version = "0.3"
+	def version = "0.4"
 	def grailsVersion = "2.0 > *"
 
 	def title = "Glass Plugin"

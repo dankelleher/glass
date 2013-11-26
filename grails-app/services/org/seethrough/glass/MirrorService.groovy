@@ -12,6 +12,7 @@ import com.google.api.client.http.ByteArrayContent
 import com.google.api.client.http.GenericUrl
 import com.google.api.client.http.HttpResponse
 import com.google.api.client.http.HttpTransport
+import com.google.api.client.http.UriTemplate;
 import com.google.api.client.json.jackson.JacksonFactory
 import com.google.api.client.util.ByteStreams
 import com.google.api.services.mirror.Mirror
@@ -29,8 +30,8 @@ class MirrorService implements InitializingBean {
 
 	public static String APP_NAME = "Default Glass App Name"	// set from config
 	
-	private static String TEST_ROOT_URL
-	private static String TEST_SERVICE_PATH 
+	private static def TEST_ROOT_URL
+	private static def TEST_SERVICE_PATH 
 	
 	def authorisationService
 	def grailsApplication
@@ -44,14 +45,16 @@ class MirrorService implements InitializingBean {
 	private void setConfig(config) {
 		APP_NAME = config.appname
 		
-		TEST_ROOT_URL = config.mirror?.rooturl
-		TEST_SERVICE_PATH = config.mirror?.servicepath
+		TEST_ROOT_URL = config.mirror.rooturl
+		TEST_SERVICE_PATH = config.mirror.servicepath
+		
 	}
 
 	private def execute(executable) {
 		def result
 		try {
 			log.debug "Executing: $executable"
+			
 			result = executable.execute()
 		} catch (GoogleJsonResponseException e) {
 			e.printStackTrace()
@@ -84,6 +87,7 @@ class MirrorService implements InitializingBean {
 		Mirror.Builder builder = createBuilder(credential)
 		
 		if (TEST_ROOT_URL) {
+			log.info "Using test Mirror Service $TEST_ROOT_URL"
 			builder.setRootUrl(TEST_ROOT_URL)
 					.setServicePath(TEST_SERVICE_PATH)
 		}
